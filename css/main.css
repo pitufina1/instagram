@@ -1,0 +1,42 @@
+
+
+.rejilla * {
+    box-sizing: border-box; /* para que los padding y border no se sumen al width */
+  }
+  .rejilla {
+    text-align: center; /* todo centradico */
+  }
+  .rejilla > li {
+    display: inline-block;
+    width: 100%;
+    margin: -2px; /* esto es para solventar la posibilidad de que no entren las columnas diseñadas */
+    vertical-align: top; /* alinear cada producto arriba */
+  }
+  @media (min-width: 425px) { /* para esta resolución mínima */
+    .rejilla > li {
+      width: 50%; /* 2 columnas a partir de la resolución indicada */
+    }
+  }
+  @media (min-width: 768px) { /* para esta resolución mínima */
+    .rejilla > li {
+      width: 33.33333333%; /* 3 columnas a partir de la resolución indicada */
+    }
+  }
+  @media (min-width: 992px) { /* para esta resolución mínima */
+    .rejilla > li {
+      width: 25%; /* 4 columnas a partir de la resolución indicada */
+    }
+  }
+  .rejilla a {
+    display: block; /* para que el enlace abarque toda la "celda" del producto */
+    padding: 15px;
+  }
+  .rejilla a:hover {
+    box-shadow: 0 0 0 2px #ccc; /* efecto para remarcar productos al pasar el cursor por encima */
+  }
+  .rejilla img { /* para que las imágenes se autoajusten si la rejilla es más pequeña */
+    max-width: 100%;
+    height: auto;
+  }
+  
+  

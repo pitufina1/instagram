@@ -1,0 +1,8 @@
+body {
+    background: aqua;
+}
+
+.col {
+    box-sizing: border-box;
+    overflow: auto;
+}

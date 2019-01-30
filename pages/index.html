@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Instagram</title>
+        <script src="/js/libs/jquery-3.3.1.min.js"></script>
+        <script src="/js/libs/moment.min.js"></script>
+        <script type="text/javascript" src="/js/base.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/style.css"> 
+    
+    </head>
+    <body>
+       <div class="container fluid" id="fotos">
+           <div class="row"> 
+                <div class="col-md-4" style="float:left">
+                    <img src="https://i.pinimg.com/236x/89/f4/09/89f4090aeb0afbb5caac774f7c4a4dc8--sunset-lover-beautiful-sunset.jpg" alt="">
+                    
+                        <h4> Paseando por Conil</h4>
+                        <p> 2016-08-23</p>
+                </div>
+                <div class="col-md-4" style="float:left">
+                    <img src="https://i.pinimg.com/236x/2c/3a/09/2c3a094fdbc14e5207f78eabbdfe7d84--moon-shot-moon-pics.jpg" alt="">
+                    <div class="text">
+                        <h4> Paseando por Conil</h4>
+                        <p> 2016-08-23</p>
+                    </div>
+                </div> 
+                <div class="col-md-4" style="float:left">
+                    <img src="https://i.pinimg.com/236x/47/c6/90/47c6900d1525c798885ae8213d560b2c--koko-haul.jpg" alt="">
+                    <div class="text">
+                        <h4> Paseando por Conil</h4>
+                        <p> 2016-08-23</p>
+                    </div>
+                </div> 
+            </div>
+       </div>
+
+        <form action="insertarusuario" id="usuario" method="post">
+            <h2><center> CREAR REGISTRO </center></h2>
+            <input type="text" id="txtTexto" placeholder="Nombre" required/></br></br>
+            <input type="email" id="txtEmail" placeholder="Email" required/></br></br>
+            <input type="password" id="txtPassword" placeholder="Password" required/></br></br>
+            <input type="button" id="btnRegistrarse" value="Registrarse" />
+            <a href="login">Iniciar Sesión</a>
+        </form> 
+        
+    </body>
+</html>
