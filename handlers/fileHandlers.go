@@ -20,20 +20,6 @@ func IndexFile(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "pages/index.html")
 }
 
-//MainFile Función que devuelve el main.html
-func MainFile(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Incoming request from " + r.URL.EscapedPath())
-	if r.URL.Path != PathMain {
-		http.NotFound(w, r)
-		return
-	}
-	if r.Method != http.MethodGet {
-		http.NotFound(w, r)
-		return
-	}
-	http.ServeFile(w, r, "pages/main.html")
-}
-
 //JsFile Manejador de archivos javascript
 func JsFile(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Incoming request from " + r.URL.EscapedPath())
@@ -53,7 +39,8 @@ func JsFile(w http.ResponseWriter, r *http.Request) {
 	case "js/libs/jquery-3.3.1.min.js",
 		"js/libs/moment.min.js",
 		//Internos
-		"js/base.js":
+		"js/base.js",
+		"js/login.js":
 		http.ServeFile(w, r, file)
 		break
 	default:
@@ -89,6 +76,11 @@ func Register(w http.ResponseWriter, r *http.Request) {
 //Login Manejador de login
 func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Incoming request from " + r.URL.EscapedPath())
+
+	if r.URL.Path != PathLogin {
+		http.NotFound(w, r)
+		return
+	}
 	if r.Method != http.MethodGet {
 		http.NotFound(w, r)
 		return
@@ -96,4 +88,18 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	http.ServeFile(w, r, "pages/login.html")
 	return
+}
+
+//MainFile Función que devuelve el main.html
+func MainFile(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("Incoming request from " + r.URL.EscapedPath())
+	if r.URL.Path != PathMain {
+		http.NotFound(w, r)
+		return
+	}
+	if r.Method != http.MethodGet {
+		http.NotFound(w, r)
+		return
+	}
+	http.ServeFile(w, r, "pages/main.html")
 }

@@ -23,3 +23,10 @@ type RComentario struct {
 	Texto string
 	Fecha time.Time
 }
+
+//RLogin struct
+type RLogin struct {
+	ID         string
+	Correo     string
+	Contrasena string
+}

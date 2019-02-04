@@ -4,16 +4,16 @@
         <title>Instagram</title>
         <script src="/js/libs/jquery-3.3.1.min.js"></script>
         <script src="/js/libs/moment.min.js"></script>
-        <script type="text/javascript" src="/js/base.js"></script>
-        <link rel="stylesheet" type="text/css" href="/css/login.css"> 
+        <script type="text/javascript" src="js/login.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/base.css"> 
     
     </head>
     <body>
             <h2>Datos del Usuario</h2>
-            <form>
-                <input type="email" id="txtEmail" placeholder="Email"/></br></br>
-                <input type="password" id="txtPassword" placeholder="Password"/></br></br>
-                <input type="submit" formaction="main" id="btnEnviar" value="Iniciar Sesión" />
+            <form action="/main" id="usuario" method="POST">
+                Correo: <input type="email" id="txtEmail" placeholder="Email"/></br></br>
+                Contraseña: <input type="password" id="txtPassword" placeholder="Password"/></br></br>
+                <input type="button" id="btnLogin" value="Iniciar Sesión" />
                 <!-- <input type="file" name="archivo" multiple="multiple" />  -->
             </form>
     </body>

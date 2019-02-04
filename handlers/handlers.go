@@ -5,9 +5,6 @@ import "net/http"
 //PathInicio Ruta raíz
 const PathInicio string = "/"
 
-//PathMain Ruta raíz
-const PathMain string = "/main"
-
 //PathJSFiles Ruta a la carpeta de scripts de javascript
 const PathJSFiles string = "/js/"
 
@@ -18,16 +15,13 @@ const PathCSSFiles string = "/css/"
 const PathInsertarUsuario string = "/insertarusuario"
 
 //PathListadoUsuarios Ruta de obtención de las usuarios de hoy
-const PathListadoUsuarios string = "/listausuarios"
+const PathLoginUsuario string = "/loginusuario"
 
-//PathEnvioFoto Ruta de envío de fotos
-const PathEnvioFoto string = "/envio"
-
-//PathListadoFotos Ruta de obtención de las fotos de hoy
-const PathListadoFotos string = "/lista"
-
-//PathLogin Ruta de logueo de usuario
+//PathLogin Ruta de pagina de login de usuario
 const PathLogin string = "/login"
+
+//PathMain Ruta raíz
+const PathMain string = "/main"
 
 //ManejadorHTTP encapsula como tipo la función de manejo de peticiones HTTP, para que sea posible almacenar sus referencias en un diccionario
 type ManejadorHTTP = func(w http.ResponseWriter, r *http.Request)
@@ -41,10 +35,7 @@ func init() {
 	Manejadores[PathMain] = MainFile
 	Manejadores[PathJSFiles] = JsFile
 	Manejadores[PathCSSFiles] = CssFile
-	Manejadores[PathEnvioFoto] = Insert
 	Manejadores[PathInsertarUsuario] = InsertUsuario
-	Manejadores[PathListadoUsuarios] = List
-	Manejadores[PathListadoFotos] = List
 	Manejadores[PathLogin] = Login
-
+	Manejadores[PathLoginUsuario] = LoginUsuario
 }

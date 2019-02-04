@@ -4,7 +4,7 @@
         <title>Instagram</title>
         <script src="/js/libs/jquery-3.3.1.min.js"></script>
         <script src="/js/libs/moment.min.js"></script>
-        <script type="text/javascript" src="/js/base.js"></script>
+        <script type="text/javascript" src="js/base.js"></script>
         <link rel="stylesheet" type="text/css" href="/css/style.css"> 
     
     </head>
@@ -34,11 +34,11 @@
             </div>
        </div>
 
-        <form action="insertarusuario" id="usuario" method="post">
+        <form action="insertarusuario" id="usuario" method="POST">
             <h2><center> CREAR REGISTRO </center></h2>
-            <input type="text" id="txtTexto" placeholder="Nombre" required/></br></br>
-            <input type="email" id="txtEmail" placeholder="Email" required/></br></br>
-            <input type="password" id="txtPassword" placeholder="Password" required/></br></br>
+            Nombre:<input type="text" id="txtTexto" placeholder="Nombre" required/></br></br>
+            Correo:<input type="email" id="txtEmail" placeholder="Email" required/></br></br>
+            Contraseña: <input type="password" id="txtPassword" placeholder="Password" required/></br></br>
             <input type="button" id="btnRegistrarse" value="Registrarse" />
             <a href="login">Iniciar Sesión</a>
         </form> 

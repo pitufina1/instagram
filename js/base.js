@@ -1,5 +1,6 @@
 $(document).ready(function() {
-    
+    console.log("holaaaa")
+
    /* ActualizarUsuario();*/
     $("#txtEmail").keyup(function(event) {
         if (event.keyCode === 13) {
@@ -22,6 +23,7 @@ $(document).ready(function() {
         $.post({
             url:"/insertarusuario",
             data: JSON.stringify(envio),
+
             success: function(data, status, jqXHR) {
                 console.log(data);
                 $("#txtTexto").val('')
@@ -42,43 +44,3 @@ $(document).ready(function() {
         });
     });
 });
-
-/*function ActualizarUsuario() {
-    var filtro = {
-        correo: moment().format('YYYY-MM-DDT00:00:00Z')
-    };
-    $.ajax({
-        url: "/listausuarios",
-        method: "POST",
-        data: JSON.stringify(filtro),
-        dataType: "json",
-        contentType: "application/json",
-        success: function(data) {
-            if(data != null)
-                console.log(data.length + " objetos obtenidos");
-            Historial_UI(data);
-        },
-        error: function(data) {
-            console.log(data);
-        }
-    });
-}
-
-function Usuario_UI(array) {
-    var tbody = $("#usuario tbody");
-    tbody.children().remove();
-    if(array != null && array.length > 0) {
-
-        for(var x = 0; x < array.length; x++) {
-            tbody.append(
-                "<tr><td>" + array[x].ID + 
-                "</td><td>" + array[x].Nombre + 
-                "</td><td>" + array[x].Correo + 
-                "</td><td>" + array[x].Contrasena + 
-                "</td></tr>");
-        }
-    } else {
-        tbody.append('<tr><td colspan="3">No hay registros de hoy</td></tr>');
-        
-    }
-}*/

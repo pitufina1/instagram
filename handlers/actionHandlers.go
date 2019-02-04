@@ -8,50 +8,11 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+
+	"github.com/gorilla/mux"
+	"github.com/gorilla/securecookie"
+	"golang.org/x/crypto/bcrypt"
 )
-
-//Insert Función que inserta una foto en la base de datos local
-func Insert(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Incoming request from " + r.URL.EscapedPath())
-	if r.URL.Path != PathEnvioFoto {
-		http.NotFound(w, r)
-		return
-	}
-	if r.Method != http.MethodPost {
-		http.NotFound(w, r)
-		return
-	}
-
-	defer r.Body.Close()
-	bytes, e := ioutil.ReadAll(r.Body)
-
-	if e == nil {
-		var foto model.Foto
-		enTexto := string(bytes)
-		fmt.Println("En texto: " + enTexto)
-		_ = json.Unmarshal(bytes, &foto)
-
-		if foto.NombreFoto != "" {
-			foto.NombreFoto = strings.ToUpper(foto.NombreFoto)
-		} else {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintln(w, "La foto está vacía")
-			return
-		}
-
-		w.WriteHeader(http.StatusOK)
-
-		w.Header().Add("Content-Type", "application/json")
-
-		respuesta, _ := json.Marshal(foto)
-		fmt.Fprint(w, string(respuesta))
-
-		go client.InsertarFoto(&foto)
-	} else {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintln(w, e)
-	}
-}
 
 //Insert Función que inserta un usuario en la base de datos local
 func InsertUsuario(w http.ResponseWriter, r *http.Request) {
@@ -80,9 +41,17 @@ func InsertUsuario(w http.ResponseWriter, r *http.Request) {
 			usuario.Nombre = strings.ToUpper(usuario.Nombre)
 
 			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintln(w, "El usuario está vacío")
+			fmt.Fprintln(w, "El registro está vacío")
 			return
 		}
+
+		//Encripta la contraseña
+		hash, err := bcrypt.GenerateFromPassword([]byte(usuario.Contrasena), bcrypt.DefaultCost)
+		if err != nil {
+			fmt.Println(err)
+		}
+		hashComoCadena := string(hash)
+		usuario.Contrasena = hashComoCadena
 
 		w.WriteHeader(http.StatusOK)
 
@@ -98,10 +67,10 @@ func InsertUsuario(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//List Función que devuelve el listado de usuarios de la base de datos dado un filtro
-func ListUsuarios(w http.ResponseWriter, r *http.Request) {
+//LoginUsuario Función que devuelve el usuario logueado de la base de datos dado un filtro
+func LoginUsuario(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Incoming request from " + r.URL.EscapedPath())
-	if r.URL.Path != PathListadoUsuarios {
+	if r.URL.Path != PathLoginUsuario {
 		http.NotFound(w, r)
 		return
 	}
@@ -111,69 +80,96 @@ func ListUsuarios(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 	bytes, e := ioutil.ReadAll(r.Body)
+	resp := false
 
 	if e == nil {
-		var filtro model.Filtro
-		e = json.Unmarshal(bytes, &filtro)
+		var usuario model.Login
+		enTexto := string(bytes)
+		fmt.Println("En texto: " + enTexto)
+		_ = json.Unmarshal(bytes, &usuario)
 
-		if e == nil {
-			listausuarios := client.ListarRegistrosUsuarios(&filtro)
+		fmt.Println(usuario.Correo)
 
-			w.WriteHeader(http.StatusOK)
-
-			w.Header().Add("Content-Type", "application/json")
-
-			respuesta, _ := json.Marshal(&listausuarios)
-			fmt.Fprint(w, string(respuesta))
-		} else {
+		if usuario.Correo == "" || usuario.Contrasena == "" {
 			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintln(w, "La petición no pudo ser parseada")
-			fmt.Fprintln(w, e.Error())
+			fmt.Fprintln(w, "El registro está vacío")
 			return
 		}
 
+		//Contraseña de la Base de Datos
+		contrasena := client.InsertarLogin(&usuario)
+
+		//Comprueba que las dos contraseñas sean iguales
+		if err := bcrypt.CompareHashAndPassword([]byte(contrasena), []byte(usuario.Contrasena)); err != nil {
+			fmt.Printf("No estas logeado")
+			//fmt.Println(usuario.Contrasena)
+		} else {
+			resp = true
+			setSession(usuario.Correo, w)
+			fmt.Printf("Usuario logeado")
+			getID(r)
+
+		}
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintln(w, e)
+		fmt.Fprintln(w, resp)
+	}
+	fmt.Fprintln(w, resp)
+}
+
+var cookieHandler = securecookie.New(
+	securecookie.GenerateRandomKey(64),
+	securecookie.GenerateRandomKey(32))
+
+var router = mux.NewRouter()
+
+/*func loginHandler(response http.ResponseWriter, request *http.Request) {
+	name := request.FormValue("name")
+	pass := request.FormValue("password")
+	redirectTarget := "/"
+	if name != "" && pass != "" {
+		// .. check credentials ..
+		setSession(name, response)
+		redirectTarget = "/main"
+	}
+	http.Redirect(response, request, redirectTarget, 302)
+}*/
+
+func logoutHandler(response http.ResponseWriter, request *http.Request) {
+	clearSession(response)
+	http.Redirect(response, request, "/", 302)
+}
+
+func setSession(name string, response http.ResponseWriter) {
+	value := map[string]string{
+		"name": name,
+	}
+	if encoded, err := cookieHandler.Encode("session", value); err == nil {
+		cookie := &http.Cookie{
+			Name:  "session",
+			Value: encoded,
+			Path:  "/",
+		}
+		http.SetCookie(response, cookie)
 	}
 }
 
-//List Función que devuelve las fotos de la base de datos dado un filtro
-func List(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Incoming request from " + r.URL.EscapedPath())
-	if r.URL.Path != PathListadoFotos {
-		http.NotFound(w, r)
-		return
-	}
-	if r.Method != http.MethodPost {
-		http.NotFound(w, r)
-		return
-	}
-	defer r.Body.Close()
-	bytes, e := ioutil.ReadAll(r.Body)
-
-	if e == nil {
-		var filtro model.Filtro
-		e = json.Unmarshal(bytes, &filtro)
-
-		if e == nil {
-			lista := client.ListarRegistros(&filtro)
-
-			w.WriteHeader(http.StatusOK)
-
-			w.Header().Add("Content-Type", "application/json")
-
-			respuesta, _ := json.Marshal(&lista)
-			fmt.Fprint(w, string(respuesta))
-		} else {
-			w.WriteHeader(http.StatusBadRequest)
-			fmt.Fprintln(w, "La foto no pudo ser parseada")
-			fmt.Fprintln(w, e.Error())
-			return
+func getID(request *http.Request) (name string) {
+	if cookie, err := request.Cookie("session"); err == nil {
+		cookieValue := make(map[string]string)
+		if err = cookieHandler.Decode("session", cookie.Value, &cookieValue); err == nil {
+			name = cookieValue["name"]
 		}
-
-	} else {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintln(w, e)
 	}
+	return name
+}
+
+func clearSession(response http.ResponseWriter) {
+	cookie := &http.Cookie{
+		Name:   "session",
+		Value:  "",
+		Path:   "/",
+		MaxAge: -1,
+	}
+	http.SetCookie(response, cookie)
 }
