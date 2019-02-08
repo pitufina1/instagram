@@ -5,8 +5,11 @@ import (
 	"fmt"
 	client "instagram/data/dataclient"
 	"instagram/data/model"
+	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/gorilla/mux"
@@ -172,4 +175,26 @@ func clearSession(response http.ResponseWriter) {
 		MaxAge: -1,
 	}
 	http.SetCookie(response, cookie)
+}
+
+// UploadFile sube el archivo al servidor
+func Upload(w http.ResponseWriter, r *http.Request) {
+	r.ParseMultipartForm(2500)
+
+	file, fileInfo, err := r.FormFile("archivo")
+
+	f, err := os.OpenFile("./files/"+fileInfo.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+
+	//aki deberían ir las variables que me asocien el archivo que quiero subir correspondiente a un ID_usuario
+
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
+	defer f.Close()
+
+	io.Copy(f, file)
+
+	fmt.Fprintf(w, fileInfo.Filename)
 }

@@ -4,17 +4,29 @@
         <title>Instagram</title>
         <script src="/js/libs/jquery-3.3.1.min.js"></script>
         <script src="/js/libs/moment.min.js"></script>
-        <script type="text/javascript" src="js/base.js"></script>
-        <link rel="stylesheet" type="text/css" href="/css/main.css"> 
+        <script type="text/javascript" src="js/foto.js"></script>
+        <link rel="stylesheet" type="text/css" href="/css/base.css"> 
+       
     
     </head>
     <body>
-      
        
-        <h1>Hello, world!{{.Nombre}},{{.Correo}}</h1>
-       
-  
-  
-       
+        <h1>PERFIL</h1>
+        <a href="/">Cerrar Sesión</a></br></br>
+    <div class="container float" id="fotos">
+        <div class="row">
+            <div class="col">
+                
+            <img src="https://scontent-gru2-1.cdninstagram.com/vp/77b1e1d7b88de282c037061bbea32615/5CDDD9F1/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-gru2-1.cdninstagram.com" alt="">
+            </div>
+        </div>
+    </div>
+    
+    <h1>Subir Imágenes</h1>
+    <form action="upload" method="POST" enctype="multipart/form-data">
+        <input type="file" id="inputFile" name="archivo">
+        <input type="submit" id="btnSave" value="Guardar">   
+    </form>
+    
     </body>
 </html>

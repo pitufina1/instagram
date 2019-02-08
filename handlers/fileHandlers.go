@@ -40,7 +40,8 @@ func JsFile(w http.ResponseWriter, r *http.Request) {
 		"js/libs/moment.min.js",
 		//Internos
 		"js/base.js",
-		"js/login.js":
+		"js/login.js",
+		"js/foto.js":
 		http.ServeFile(w, r, file)
 		break
 	default:
@@ -58,18 +59,6 @@ func CssFile(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.ServeFile(w, r, "css/style.css")
-	return
-}
-
-//Register Manejador de register
-func Register(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Incoming request from " + r.URL.EscapedPath())
-	if r.Method != http.MethodGet {
-		http.NotFound(w, r)
-		return
-	}
-
-	http.ServeFile(w, r, "pages/register.html")
 	return
 }
 

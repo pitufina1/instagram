@@ -20,6 +20,12 @@ const PathLoginUsuario string = "/loginusuario"
 //PathLogin Ruta de pagina de login de usuario
 const PathLogin string = "/login"
 
+//PathInsertarFoto Ruta para
+const PathInsertarFoto string = "/upload"
+
+//PathInsertarFoto Ruta para
+const PathUpload string = "/upload"
+
 //PathMain Ruta raíz
 const PathMain string = "/main"
 
@@ -38,4 +44,6 @@ func init() {
 	Manejadores[PathInsertarUsuario] = InsertUsuario
 	Manejadores[PathLogin] = Login
 	Manejadores[PathLoginUsuario] = LoginUsuario
+	Manejadores[PathInsertarFoto] = Upload
+	Manejadores[PathUpload] = Upload
 }
