@@ -18,7 +18,7 @@ type Filtro struct {
 
 //Foto struct
 type Foto struct {
-	NombreFoto string
+	//NombreFoto string
 	Fecha      time.Time
 }
 

@@ -14,7 +14,7 @@ type RUsuario struct {
 type RFoto struct {
 	ID         int
 	NombreFoto string
-	Fecha      time.Time
+	//Fecha      time.Time
 }
 
 //RComentario struct

@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"instagram/data/model"
-	"time"
 
 	_ "github.com/go-sql-driver/mysql" ///El driver se registra en database/sql en su función Init(). Es usado internamente por éste
 )
@@ -27,32 +26,30 @@ func InsertarUsuario(objeto *model.Usuario) {
 }
 
 //Listar registro de usuarios test
-func ListarRegistrosUsuarios(objeto *model.Filtro) []model.RUsuario {
-	db, err := sql.Open("mysql", "ubuntu:ubuntu@tcp(localhost:3306)/Instagram?parseTime=true")
+func ListarRegistrosUsuarios(correo string) int {
+	db, err := sql.Open("mysql", "ubuntu:ubuntu@tcp(localhost:3306)/Instagram")
 
 	if err != nil {
 		panic(err.Error())
 	}
 
 	defer db.Close()
-	comando := "SELECT * FROM Usuario WHERE (correo <= '" + objeto.Correo + "')"
+	comando := "SELECT ID FROM Usuario WHERE (correo = '" + correo + "')"
 	fmt.Println(comando)
-	query, err := db.Query("SELECT * FROM Usuario WHERE (correo >= ?)", objeto.Correo)
+	query, err := db.Query("SELECT ID FROM Usuario WHERE (correo = '" + correo + "')")
 
 	if err != nil {
 		panic(err.Error())
 	}
 	defer query.Close()
 
-	resultado := make([]model.RUsuario, 0)
+	var resultado int
 	for query.Next() {
-		var fila = model.RUsuario{}
 
-		err = query.Scan(&fila.ID, &fila.Nombre, &fila.Correo, &fila.Contrasena)
+		err := query.Scan(&resultado)
 		if err != nil {
 			panic(err.Error())
 		}
-		resultado = append(resultado, fila)
 	}
 	return resultado
 }
@@ -88,15 +85,15 @@ func InsertarLogin(objeto *model.Login) string {
 }
 
 //InsertarFoto test
-func InsertarFoto(objeto *model.Foto) {
+func InsertarFoto(nombrefoto string, id int) {
 	db, err := sql.Open("mysql", "ubuntu:ubuntu@tcp(localhost:3306)/Instagram")
 
 	if err != nil {
-		panic(err.Error()) //si se abre bien
+		panic(err.Error())
 	}
 
 	defer db.Close() //cerrar la conexion
-	insert, err := db.Query("INSERT INTO Foto(ID, NombreFoto, Fecha) VALUES (?, ?, utc_timestamp())", objeto.NombreFoto)
+	insert, err := db.Query("INSERT INTO Foto(NombreFoto, Usuario_ID) VALUES (?, ?)", nombrefoto, id)
 	// Inserta una foto en la base de datos
 	if err != nil {
 		panic(err.Error())
@@ -105,32 +102,31 @@ func InsertarFoto(objeto *model.Foto) {
 }
 
 //ListarFotos test
-func ListarFotos(objeto *model.Filtro) []model.RFoto {
-	db, err := sql.Open("mysql", "ubuntu:ubuntu@tcp(localhost:3306)/Instagram?parseTime=true")
+/*func ListarFotos(objeto *model.Filtro) []model.RFoto {
+	db, err := sql.Open("mysql", "ubuntu:ubuntu@tcp(localhost:3306)/Instagram")
 
 	if err != nil {
 		panic(err.Error())
 	}
 
 	defer db.Close()
-	comando := "SELECT ID FROM Foto WHERE (fecha <= '" + objeto.Fecha.Format(time.RFC3339) + "')"
+	comando := "SELECT ID, NombreFoto FROM Foto )"
 	fmt.Println(comando)
-	query, err := db.Query("SELECT ID FROM Foto WHERE (fecha >= ?)", objeto.Fecha.Format(time.RFC3339))
+	query, err := db.Query("SELECT ID, NombreFoto FROM Foto")
 
 	if err != nil {
 		panic(err.Error())
 	}
-	defer query.Close()
 
 	resultado := make([]model.RFoto, 0)
 	for query.Next() {
-		var fila = model.RFoto{}
+		var foto = model.RFoto{}
 
-		err = query.Scan(&fila.ID, &fila.NombreFoto, &fila.Fecha)
+		err = query.Scan(&foto.ID, &foto.NombreFoto)
 		if err != nil {
 			panic(err.Error())
 		}
-		resultado = append(resultado, fila)
+		resultado = append(resultado, foto)
 	}
 	return resultado
-}
+}*/
