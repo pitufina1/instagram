@@ -13,10 +13,10 @@ func InsertarUsuario(objeto *model.Usuario) {
 	db, err := sql.Open("mysql", "ubuntu:ubuntu@tcp(localhost:3306)/Instagram")
 
 	if err != nil {
-		panic(err.Error()) //si se abre bien
+		panic(err.Error())
 	}
 
-	defer db.Close() //cerrar la conexion
+	defer db.Close()
 	insert, err := db.Query("INSERT INTO Usuario(nombre, correo, contrasena) VALUES (?, ?, ?)", objeto.Nombre, objeto.Correo, objeto.Contrasena)
 	// Inserta un nuevo usuario en la base de datos
 	if err != nil {
@@ -102,7 +102,7 @@ func InsertarFoto(nombrefoto string, id int) {
 }
 
 //ListarFotos test
-/*func ListarFotos(objeto *model.Filtro) []model.RFoto {
+func ListarFotos() []model.RFoto {
 	db, err := sql.Open("mysql", "ubuntu:ubuntu@tcp(localhost:3306)/Instagram")
 
 	if err != nil {
@@ -110,7 +110,7 @@ func InsertarFoto(nombrefoto string, id int) {
 	}
 
 	defer db.Close()
-	comando := "SELECT ID, NombreFoto FROM Foto )"
+	comando := "SELECT ID, NombreFoto FROM Foto"
 	fmt.Println(comando)
 	query, err := db.Query("SELECT ID, NombreFoto FROM Foto")
 
@@ -129,4 +129,4 @@ func InsertarFoto(nombrefoto string, id int) {
 		resultado = append(resultado, foto)
 	}
 	return resultado
-}*/
+}

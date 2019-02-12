@@ -24,6 +24,8 @@ func main() {
 	//http.HandleFunc("/lista", hnd.List)
 
 	// en este punto se monta el servidor
+
+	http.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir("files"))))
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(port), nil))
 	fmt.Println("Servidor abierto en http://localhost:" + strconv.Itoa(port))
 }

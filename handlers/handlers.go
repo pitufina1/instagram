@@ -30,7 +30,7 @@ const PathUpload string = "/upload"
 const PathMain string = "/main"
 
 //PathMain Ruta raíz
-//const PathListadoFotos string = "/listadofotos"
+const PathListadoFotos string = "/lista"
 
 //ManejadorHTTP encapsula como tipo la función de manejo de peticiones HTTP, para que sea posible almacenar sus referencias en un diccionario
 type ManejadorHTTP = func(w http.ResponseWriter, r *http.Request)
@@ -49,5 +49,5 @@ func init() {
 	Manejadores[PathLoginUsuario] = LoginUsuario
 	Manejadores[PathInsertarFoto] = Upload
 	Manejadores[PathUpload] = Upload
-	//Manejadores[PathListadoFotos] = ListadoFotos
+	Manejadores[PathListadoFotos] = ListadoFotos
 }

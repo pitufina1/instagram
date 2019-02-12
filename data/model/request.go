@@ -17,10 +17,10 @@ type Filtro struct {
 }
 
 //Foto struct
-type Foto struct {
+/*type Foto struct {
 	//NombreFoto string
 	Fecha      time.Time
-}
+}*/
 
 //Comentario struct
 type Comentario struct {

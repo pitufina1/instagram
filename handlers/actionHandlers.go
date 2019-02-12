@@ -191,14 +191,13 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseMultipartForm(2500)
 
-	file, fileInto, err := r.FormFile("archivo")
+	file, fileInfo, err := r.FormFile("archivo")
 
-	//aki deberían ir las variables que me asocien el archivo que quiero subir correspondiente a un ID_usuario
 	texto := r.FormValue("texto")
 	correo := getID(r)
 
 	fmt.Println(texto, "Correo Usuario: ", correo)
-	f, err := os.OpenFile("./files/"+fileInto.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+	f, err := os.OpenFile("./files/"+fileInfo.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 
 	if err != nil {
 		log.Fatal(err)
@@ -213,11 +212,11 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	id := client.ListarRegistrosUsuarios(correo)
 	fmt.Println(id)
 
-	go client.InsertarFoto(fileInto.Filename, id)
+	go client.InsertarFoto(fileInfo.Filename, id)
 }
 
 //ListadoFotosFunción que devuelve la Fx ListarFotos() de la base de datos
-/*func ListadoFotos(w http.ResponseWriter, r *http.Request) {
+func ListadoFotos(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Incoming request from " + r.URL.EscapedPath())
 	if r.URL.Path != PathListadoFotos {
 		http.NotFound(w, r)
@@ -228,22 +227,22 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	defer r.Body.Close()
-	bytes, e := ioutil.ReadAll(r.Body)
+	//bytes, e := ioutil.ReadAll(r.Body)
 
-	if e == nil {
-		var filtro model.Filtro
-		e = json.Unmarshal(bytes, &filtro)
+	/*if e == nil {
+	var filtro model.Filtro
+	e = json.Unmarshal(bytes, &filtro)
 
-		if e == nil {
-			lista := client.ListarFotos(&filtro)
+	if e == nil {*/
+	lista := client.ListarFotos()
 
-			w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusOK)
 
-			w.Header().Add("Content-Type", "application/json")
+	w.Header().Add("Content-Type", "application/json")
 
-			respuesta, _ := json.Marshal(&lista)
-			fmt.Fprint(w, string(respuesta))
-		} else {
+	respuesta, _ := json.Marshal(&lista)
+	fmt.Fprint(w, string(respuesta))
+	/*} else {
 			w.WriteHeader(http.StatusBadRequest)
 			fmt.Fprintln(w, "La petición no pudo ser parseada")
 			fmt.Fprintln(w, e.Error())
@@ -253,5 +252,5 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	} else {
 		w.WriteHeader(http.StatusBadRequest)
 		fmt.Fprintln(w, e)
-	}
-}*/
+	}*/
+}

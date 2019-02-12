@@ -40,8 +40,8 @@ func JsFile(w http.ResponseWriter, r *http.Request) {
 		"js/libs/moment.min.js",
 		//Internos
 		"js/base.js",
-		"js/login.js",
-		"js/foto.js":
+		"js/login.js":
+		//"js/foto.js"
 		http.ServeFile(w, r, file)
 		break
 	default:
